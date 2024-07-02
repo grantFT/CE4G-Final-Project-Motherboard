@@ -1,10 +1,8 @@
 #ifndef GPS_HPP
 #define GPS_HPP
 
-#include <Adafruit_GPS.h>
 #include <Arduino.h>
-
-#include <coord.hpp>
+#include <Adafruit_GPS.h>
 
 namespace GPS {
 
@@ -30,6 +28,7 @@ void initialise() {
  * @return coord
  */
 coord query_GPS() {
+  Serial.println("queried");
   return {GPS.latitude, GPS.lat, GPS.longitude, GPS.lon, GPS.altitude};
 }
 

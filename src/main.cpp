@@ -1,10 +1,14 @@
 #include <Arduino.h>
+#include <config.hpp>
 
-#include <coord.hpp>
-#include <gps.hpp>
-#include <io.hpp>
-#include <screen.hpp>
+// contains all statistics (in stats form) from all microcontrollers
+std::vector<stats> allData = {}; 
+// gets the statistics measured from this mother microcontroller
+stats getAll();
+// calculates averages as well as minimum/maximum values
+void calc();
 
+// idk
 void handleMessage(AdafruitIO_Data *data);
 
 void setup() {
@@ -12,39 +16,59 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+
   // initialise peripherals
   GPS::initialise();
   screen::initialise();
+  BMESetup();
 
   // connect to io.adafruit.com
   IO::try_connect();
 
-  IO::mustard->onMessage(handleMessage);
+  IO::weather1->onMessage(handleMessage);
+  IO::weather2->onMessage(handleMessage);
+
+  allData.push_back(getAll());
 }
 
 void loop() {
   IO::run();
-  delay(5000);
+  // delays 15 seconds
+  delay(15000);
 
+  // collects data from GPS and BME
   auto my_coords{GPS::query_GPS()};
+  BMELoop();
 
   if (IO::IO_connected) {
-    IO::ketchup->save(1, my_coords.latitude, my_coords.longitude,
-                      my_coords.altitude);
+    IO::motherfeed->save(1, my_coords.latitude, my_coords.longitude,
+                      my_coords.altitude); // UPLOADS TO IO /maybe
+                      screen::clear();
+                      screen::screen.setTextColor(ST77XX_CYAN);
+    screen::screen.print("IO connected");          
   } else {
-    screen::display(IO::IO_connected, my_coords.latitude, my_coords.lat,
-                    my_coords.longitude, my_coords.lon, my_coords.altitude);
+    screen::clear();
+    screen::screen.setTextColor(ST77XX_WHITE);
+    screen::screen.print("IO not connected");
   }
+
+  // updates data from this microcontroller
+  allData[0]=getAll();
+  calc(allData);
+
+  // waits 45 seconds, totaling one minute per loop
+  delay(45000);
 }
 
+// Takes info from feed
 void handleMessage(AdafruitIO_Data *data) {
-  int received_value = data->toInt();
+  String received_string = data->toString();
+  allData.push_back(seperate(received_string));
+  screen::screen.print("Information received");
+}
 
-  // Fetch info from IO
-  double received_lat = data->lat();
-  double received_lon = data->lon();
-  double received_ele = data->ele();
-
-  screen::display(IO::IO_connected, received_lat, received_lat < 0 ? 'S' : 'N',
-                  received_lon, received_lon < 0 ? 'E' : 'W', received_ele);
+stats getAll() {
+  return {GPS::GPS.latitude, GPS::GPS.longitude, GPS::GPS.altitude, ((bme.temperature * 1.8)+32), bme.humidity, static_cast<double>(bme.pressure)/100};
 }

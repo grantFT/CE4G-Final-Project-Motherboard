@@ -36,34 +36,6 @@ void clear() {
   screen.setCursor(0, 10);
 }
 
-/**
- * @brief display info
- *
- * @param connected
- * @param latitude
- * @param lat
- * @param longitude
- * @param lon
- * @param altitude
- */
-void display(bool connected, double latitude, char lat, double longitude,
-             char lon, double altitude) {
-  clear();
-  screen.setTextColor(ST77XX_ORANGE);
-  if (connected)
-    screen.println("Connected");
-  else
-    screen.println("Not connected");
-
-  screen.setTextColor(ST77XX_CYAN);
-  screen.printf("-------------");
-
-  screen.setTextColor(ST77XX_WHITE);
-  screen.printf("Lat: %.2f %c\n", latitude, lat);
-  screen.printf("Lon: %.2f %c\n", longitude, lon);
-  screen.printf("Ele: %.2f m\n", altitude);
-}
-
 }  // namespace screen
 
 #endif  // SCREEN_HPP
