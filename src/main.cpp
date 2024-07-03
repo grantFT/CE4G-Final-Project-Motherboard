@@ -29,7 +29,7 @@ void setup() {
 
   allData.push_back(getAll());
 
-  IO::weather1->onMessage(handleMessage);
+ IO::weather1->onMessage(handleMessage);
 }
 
 void loop() {
@@ -66,12 +66,13 @@ void loop() {
 void handleMessage(AdafruitIO_Data *data) {
   String received_string = data->toString();
   Serial.println(received_string);
-  allData[1]=(seperate(received_string));
+  if(allData.size()<2) {
+    allData.push_back(seperate(received_string));
+  } else {
+    allData[1]=(seperate(received_string));
+  }
   Serial.println(allData[1].temp);
   Serial.println(allData[1].hum);
-  screen::screen.print("Information received");
-  Serial.println("handleMessage end");
-  delay(5000);
 }
 
 stats getAll() {

@@ -2,13 +2,13 @@
 #define IO_HPP
 
 // Fetch your key from Adafruit
-#define IO_USERNAME "WII"
-#define IO_KEY "PASS"
+#define IO_USERNAME "name"
+#define IO_KEY "key"
 
 /******************************* WIFI **************************************/
 
-#define WIFI_SSID "Twimp G"
-#define WIFI_PASS "gyatspot"
+#define WIFI_SSID "wifi"
+#define WIFI_PASS "pass"
 
 #include <AdafruitIO_WiFi.h>
 
