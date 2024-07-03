@@ -2,13 +2,13 @@
 #define IO_HPP
 
 // Fetch your key from Adafruit
-#define IO_USERNAME "YOUR USERNAME"
-#define IO_KEY "YOUR KEY"
+#define IO_USERNAME "WII"
+#define IO_KEY "PASS"
 
 /******************************* WIFI **************************************/
 
-#define WIFI_SSID "YOUR SSID"
-#define WIFI_PASS "YOUR PASSWORD"
+#define WIFI_SSID "Twimp G"
+#define WIFI_PASS "gyatspot"
 
 #include <AdafruitIO_WiFi.h>
 
@@ -31,7 +31,6 @@ AdafruitIO_Feed *humrange = io.feed("Humidity range");
 
 // Feeds to be taken from
 AdafruitIO_Feed *weather1 = io.feed("weather1");
-AdafruitIO_Feed *weather2 = io.feed("weather2");
 
 // attempt connection
 void try_connect() {
