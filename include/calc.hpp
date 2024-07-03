@@ -72,15 +72,12 @@ void calc(std::vector<stats> allData) {
   minHum = std::numeric_limits<double>::max();
   maxHum = std::numeric_limits<double>::min();
   for(stats v : allData) {
-    Serial.println("v temperature:");
-    Serial.println(v.temp);
       // calc average
       if(v.lat) {av.lat+=v.lat;} else {failCount++;} // if GPS is unsuccessful, removes data points from average
       if(v.lon) {av.lon+=v.lon;}
       if(v.ele) {av.lon+=v.lon;}
       av.temp+=v.temp/allData.size();
-      Serial.println("av.temp =");
-      Serial.println(av.temp);
+
       av.hum+=v.hum/allData.size();
       av.pres+=v.pres/allData.size();
       // min/max/range
@@ -100,8 +97,6 @@ void calc(std::vector<stats> allData) {
   av.lat=(av.lat/(allData.size()-failCount));
   av.lon=(av.lon/(allData.size()-failCount));
   av.ele=(av.ele/(allData.size()-failCount));
-  Serial.println("average:");
-  Serial.println(av.temp);
   tempRange=(maxTem-minTem);
   humRange=(maxHum-minHum);
   IO::location->save(1, av.lat, av.lon, av.ele);

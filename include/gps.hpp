@@ -28,7 +28,6 @@ void initialise() {
  * @return coord
  */
 coord query_GPS() {
-  Serial.println("queried");
   return {GPS.latitude, GPS.lat, GPS.longitude, GPS.lon, GPS.altitude};
 }
 

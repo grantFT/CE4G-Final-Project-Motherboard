@@ -7,8 +7,9 @@
 
 /******************************* WIFI **************************************/
 
-#define WIFI_SSID "wifi"
+#define WIFI_SSID "name"
 #define WIFI_PASS "pass"
+
 
 #include <AdafruitIO_WiFi.h>
 
